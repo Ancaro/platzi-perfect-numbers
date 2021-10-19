@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from math import sqrt
+import multiprocessing
 
 
 def execution_time(func):
@@ -48,6 +49,18 @@ def perfect_numbers_v1(n):
 def perfect_numbers_v2(n):
     return [x for x in range(2, n+1) if sum(find_divisors_v2(x)) == x]
 
+def is_perfect(n):
+    divisors = find_divisors_v2(n)
+    if sum(divisors) == n:
+        print(n)
+
+
+@execution_time
+def perfect_numbers_v3(n):
+    numbers_to_evaluate = [x for x in range(2, n+1)]
+    with multiprocessing.Pool() as pool:
+        pool.map(is_perfect, numbers_to_evaluate)
+
 
 def run():
     n = int(input("Dime un número: "))
@@ -60,9 +73,10 @@ def run():
     # pn = perfect_numbers_v1(n)
     # for i in pn:
     #     print(i)
-    pn = perfect_numbers_v2(n)
-    for i in pn:
-        print(i)
+    # pn = perfect_numbers_v2(n)
+    # for i in pn:
+    #     print(i)
+    perfect_numbers_v3(n)
 
 
 if __name__ == '__main__':
